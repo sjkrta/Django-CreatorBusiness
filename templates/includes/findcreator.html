@@ -1,0 +1,12 @@
+<form method="POST">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <input name='name' type="text" class="form-control" placeholder="Search for creators" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <input class="btn btn-outline-secondary" type="submit" id="button-addon2" value="Search"></input>
+    </div>
+</form>
+<ul class="list-group-flush">
+{% for i in Creators %}
+    <li class="list-group-item"><a href={% url 'profile' i.username %}>{{i.first_name}} {{i.last_name}}</a></li>
+{% endfor %}
+</ul>

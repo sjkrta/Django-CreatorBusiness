@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Creator List{% endblock title %}
+{% block root %}
+    <div class="row">
+      <div class="order-xl-1 col-xxl-2 col-xl-3 col-6 border">
+        {% include 'includes/tag.html' %}
+      </div>
+      <div class="order-xl-3 col-xxl-2 col-xl-12 col-6 border">
+          {% include 'includes/findcreator.html' %}
+      </div>
+      <div class="order-xl-2 col-xxl-8 col-xl-9 col border">
+        <div class="row">
+            {% include 'includes/video.html' %}
+        </div>
+      </div>
+    </div>
+{% endblock root %}

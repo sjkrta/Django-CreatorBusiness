@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include 'includes/meta/default.html' %}
+    <title>Bigyapan Bazzar | {% block title %}{% endblock title %}</title>
+    {% include 'includes/meta/bootstrap.html' %}
+    <style>
+      {% include 'includes/css/style.css' %}
+    </style>
+  </head>
+  <body>
+      {% include 'includes/navbar.html' %}
+      {% block root %} {% endblock root %}
+  </body>
+</html>

@@ -1,0 +1,72 @@
+{% extends 'base.html' %} 
+{% block title %}Register{% endblock title %}
+{% block root %}
+<div class="registerform">
+  <div class="boxshadow">
+  <form method="post" style="width: 32rem;">
+    {% csrf_token %}
+    <div class="card-body">
+      <div class="form-floating mb-3">
+        <select class="form-select" aria-label="Default select example" name="account_type">
+          <option selected disabled>Select One From Here</option>
+          {% for i in AccountType %}
+          <option value="{{i.name}}" {% if i.name == account_type %}selected{% endif %}>{{i.name}}</option>
+          {% endfor %}
+        </select>
+        <label for="account_type">Account Type </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="first_name" placeholder="John" type="text" value='{{first_name}}' />
+        <label for="first_name">First name</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="last_name" placeholder="Doe" type="text" value='{{last_name}}'/>
+        <label for="last_name">Last name</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="username" placeholder="john_doe" type="text" value='{{username}}'/>
+        <label for="username">Username </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="email" placeholder="johndoe@example.com" type="email" value='{{email}}'/>
+        <label for="email">Email </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="contact" placeholder="0123456789" type="number" value='{{contact}}'/>
+        <label for="contact">Contact Number</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="address" placeholder="address123" type="text" value='{{address}}'/>
+        <label for="address">Address </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="id_name" placeholder="id_name" type="text" value='{{id_name}}'/>
+        <label for="id_name">Business/Youtube Name </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="id_link" placeholder="id_link" type="text" value='{{id_link}}'/>
+        <label for="id_link">Business Website/Channel Link </label>
+      </div>      
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="password1" placeholder="password1" type="password" />
+        <label for="password1">Password </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input class="form-control" id="floatingInput" name="password2" placeholder="password2" type="password" />
+        <label for="password2">Confirm Password </label>
+      </div>
+      <div class="text-center">
+        <span class="text-danger">{{error}}</span>
+      </div><br>
+      <div>
+        <p class="text-center">
+            Already have an account? Log in <a href={% url 'login' %}>here</a>
+        </p>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Create Account</button>
+      </div>
+    </form>
+    </div>
+  </div>
+{% endblock root %}

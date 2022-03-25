@@ -1,0 +1,6 @@
+<ul class="list-group-flush">
+    <p class="p-2">Tags used in the video</p>
+    {% for i in Tag %}
+        <li class="list-group-item"><a href={% url 'tag' i.title %}>#{{i.title}}</a></li>
+    {% endfor %}
+</ul>

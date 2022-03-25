@@ -1,0 +1,27 @@
+{% for i in Post %}
+<div class="col-xxl-4 col-xl-4 col-md-6 col-sm-6 p-2">
+    <div class="p-2 video-box">
+        <div class="center">
+        <iframe width="280" height="180" src="https://www.youtube.com/embed/{{i.id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="grid-image-content-box">
+            <div>
+                <img src="{{i.creator.image.url}}" class="card-img-top card_profile_image" alt="{{i.user.username}}">
+            </div>
+            <div>
+                <h5><b>{{i.creator.user.first_name}} {{i.creator.user.last_name}}</b> {% if i.creator.verified %}✅{% endif %}</h5>
+                <p><b>{{i.title}}</b></p>
+                <p>Video ID: <b>{{i.id_link}}</b></p>
+            </div>
+        </div>
+        <div class="flex-around">
+            <div>
+                <a href="{% url 'profile' i.creator.user.username %}"><button type="button" class="btn btn-primary">View Profile</button></a>
+            </div>
+            <div>
+                <a href="{% url 'media' i.id %}"><button type="button" class="btn btn-primary">Description</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
