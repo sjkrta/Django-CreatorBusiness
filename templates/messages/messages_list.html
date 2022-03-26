@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}Messages{% endblock title %}
 {% block root %}
-Message List
+<ul class="list-group list-group-flush">
+    {% for i in Account %}
+    <li class="list-group-item"><a href="{% url 'messagedetail' i %}"><h4>{{i.first_name}} {{i.last_name}}</h4></a></li>
+    {% endfor %}
+  </ul>
+
 {% endblock root %}

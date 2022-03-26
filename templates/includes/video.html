@@ -6,10 +6,10 @@
         </div>
         <div class="grid-image-content-box">
             <div>
-                <img src="{{i.creator.image.url}}" class="card-img-top card_profile_image" alt="{{i.user.username}}">
+                <a href="{% url 'profile' i.creator.user.username %}"><img src="{% if i.creator.image %}{{i.creator.image.url}}{% else %}''{% endif %}" class="card-img-top card_profile_image" alt="{{i.user.username}}"></a>
             </div>
             <div>
-                <h5><b>{{i.creator.user.first_name}} {{i.creator.user.last_name}}</b> {% if i.creator.verified %}✅{% endif %}</h5>
+                <h5><b><a href="{% url 'profile' i.creator.user.username %}">{{i.creator.user.first_name}} {{i.creator.user.last_name}}</b> {% if i.creator.verified %}✅{% endif %}</a></h5>
                 <p><b>{{i.title}}</b></p>
                 <p>Video ID: <b>{{i.id_link}}</b></p>
             </div>

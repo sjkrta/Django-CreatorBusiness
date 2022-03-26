@@ -1,14 +1,15 @@
 import datetime
-from django.http import HttpResponse
+from django.dispatch import receiver
+from django.http import HttpResponse, HttpResponseRedirect
 
 # DJANGO
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # CURRENT APPS
-from .models import Account, Category,Post,Tag,Message,AccountType
+from .models import Account, AccountForm, Category,Post, PostForm,Tag,Message
 from .passwordvalidator import password_check
 
 # -------------------------------------------ACCOUNT----------------------------------------------------------------
@@ -34,6 +35,10 @@ def register_view(request):
             address = request.POST['address']
             try:
                 account_type = request.POST['account_type']
+                if account_type == 'Creator':
+                    account_type=True
+                elif account_type=='Business Advertisor':
+                    account_type=False
             except:
                 account_type=''
             id_name = request.POST['id_name']
@@ -77,7 +82,7 @@ def register_view(request):
                             print(account_type)
                             Account.objects.create(
                                 user=user,
-                                account_type=AccountType.objects.get(name=account_type),
+                                creator=account_type,
                                 contact=contact,
                                 address=address,
                                 id_name=id_name,
@@ -98,7 +103,6 @@ def register_view(request):
             'id_link':id_link,
             'address':address,
             "contact":contact,
-            "AccountType":AccountType.objects.all(),
             "account_type":account_type
             })
     else:
@@ -168,6 +172,7 @@ def forgotpassword_view(request):
 @login_required
 def creatorpanel_listview(request):
     Creators=[]
+    Real_Creators=[]
     if request.method =='POST':
         name = request.POST['name'].split()
         for i in name:
@@ -179,10 +184,15 @@ def creatorpanel_listview(request):
             for i in lastname:
                 if not i in Creators:
                     Creators.append(i)
+    for i in Creators:
+        try:
+            Real_Creators.append(Account.objects.get(user=i, creator=True))
+        except:
+            pass
     context={
         "Post":Post.objects.all(),
         "Tag":Tag.objects.all(),
-        "Creators":Creators,
+        "Creators":Real_Creators,
         "Categories":Category.objects.all()
     }
     return render(request, 'creator/creatorpanel_list.html', context)
@@ -224,9 +234,9 @@ def tagfilter_listview(request, tag):
         name = request.POST['name'].split()
         for i in name:
             firstname=User.objects.all().filter(first_name__contains=i)
-            for i in firstname:
-                if not i in Creators:
-                    Creators.append(i)
+            # for i in firstname:
+            #     if not i in Creators:
+            #         Creators.append(Account.objects.get(user=i, account))
             lastname=User.objects.all().filter(last_name__contains=i)
             for i in lastname:
                 if not i in Creators:
@@ -247,8 +257,28 @@ def tagfilter_listview(request, tag):
 # business panel list
 @login_required
 def businesspanel_listview(request):
+    Business=[]
+    Real_Business=[]
+    if request.method =='POST':
+        name = request.POST['name'].split()
+        for i in name:
+            firstname=User.objects.all().filter(first_name__contains=i)
+            for i in firstname:
+                if not i in Business:
+                    Business.append(i)
+            lastname=User.objects.all().filter(last_name__contains=i)
+            for i in lastname:
+                if not i in Business:
+                    Business.append(i)
+    for i in Business:
+        try:
+            Real_Business.append(Account.objects.get(user=i, creator=False))
+        except:
+            pass
     context={
-        "Categories":Category.objects.all(),
+        "Account":Account.objects.filter(creator=False),
+        "Business":Real_Business,
+        "Categories":Category.objects.all()
     }
     return render(request, 'business/businesspanel_list.html', context)
 
@@ -256,34 +286,92 @@ def businesspanel_listview(request):
 # user detail
 @login_required
 def profile_view(request, name):
+    user_account =Account.objects.get(user=request.user)
+    verified = user_account.verified
+    num_post = len(Post.objects.filter(creator=user_account))
+    can_post =0
+    available_post=0
+    if verified:
+        can_post =5-num_post
+        available_post=5-num_post
+    else:
+        can_post=3-num_post
+        available_post=3-num_post
+    if can_post>0:
+        can_post=True
+    else:
+        can_post=False
+    if request.method == 'POST' and can_post:
+        form = PostForm(request.POST)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.creator = Account.objects.get(user=request.user)
+            profile = profile.save()
+    else:
+        form = PostForm()
     context={
         "Account":Account.objects.get(user__username=name),
+        "form":form,
+        "num_post":num_post,
+        "can_post":can_post,
+        "verified":verified,
+        "available_post":available_post,
         "Categories":Category.objects.all(),
         "Post":Post.objects.all().filter(creator=Account.objects.get(user=User.objects.get(username=name))),
     }
     return render(request, 'profile.html', context)
 
-# -------------------------------------------MESSAGE----------------------------------------------------------------
-# message list
-@login_required
-def message_listview(request):
+def updateprofile_view(request):
+    if request.method == 'POST':
+        first_name = request.POST['first_name'].strip().capitalize()
+        last_name = request.POST['last_name'].strip().capitalize()
+        email = request.POST['email'].lower()
+        instance = get_object_or_404(Account, id=Account.objects.get(user=request.user).id)
+        form = AccountForm(request.POST or None, request.FILES, instance=instance)
+        if form.is_valid():
+            User.objects.filter(username=request.user).update(
+                first_name=first_name,
+                last_name=last_name,
+                email=email
+                )
+            form.save()
+            return redirect('profile', name=request.user)
+        form = AccountForm(request.POST)
+    else:
+        form = AccountForm()
     context={
-        "Message":Message.objects.all(),
+        "form":form,
         "Categories":Category.objects.all(),
-        }
-    print(request.user)
-    return render(request, 'messages/messages_list.html', context)
+    }
+    return render(request, 'updateprofile.html', context)
 
+# -------------------------------------------MESSAGE----------------------------------------------------------------
 # message detail
 @login_required
 def message_detailview(request, name):
+    Messages=[]
+    if request.method =='POST':
+        message = request.POST['message']
+        Message.objects.create(reciever=User.objects.get(username=name), sender=User.objects.get(username=request.user), content=message)
     context={
         "Categories":Category.objects.all(),
-        "Message":Message.objects.all().filter(creator=name),
+        "Messages":(Message.objects.all().filter(
+            reciever=User.objects.get(username=name),
+        sender=User.objects.get(username=request.user)) | Message.objects.all().filter(
+            reciever=User.objects.get(username=request.user),
+        sender=User.objects.get(username=name))).order_by('id')
         }
-    print(request.user)
     return render(request, 'messages/messages_detail.html', context)
 
+# message detail
+@login_required
+def message_listview(request, name):
+    Account=[]
+    for i in Message.objects.filter(reciever=request.user):
+        if not i.sender in Account:
+            Account.append(i.sender)
+    context={"Account":Account}
+    return render(request, 'messages/messages_list.html', context)
 # -------------------------------------------DAY COUNTER----------------------------------------------------------------
 @login_required
 def daycounter_view(request):
@@ -317,3 +405,9 @@ def media_detailview(request, id):
         "Post":Post.objects.get(id=id),
         }
     return render(request, 'media/media_detail.html', context)
+
+# -------------------------------------------Create Post----------------------------------------------------------------
+
+def deletepost(request, id):
+    Post.objects.get(id=id).delete()
+    return redirect('profile', name=request.user)

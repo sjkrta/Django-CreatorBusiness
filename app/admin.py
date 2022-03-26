@@ -1,14 +1,10 @@
 from django.contrib import admin
-from .models import Tag, Account, Category, Post, Message, AccountType
+from .models import Tag, Account, Category, Post, Message
 # Register your models here.
 
 admin.site.register(Tag)
 admin.site.register(Category)
-admin.site.register(AccountType)
-
-@admin.register(Account)
-class AccountAdmin(admin.ModelAdmin):
-    list_display = ('user','account_type','contact','address','verified')
+admin.site.register(Account)
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):

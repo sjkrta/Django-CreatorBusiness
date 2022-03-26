@@ -9,9 +9,8 @@
       <div class="form-floating mb-3">
         <select class="form-select" aria-label="Default select example" name="account_type">
           <option selected disabled>Select One From Here</option>
-          {% for i in AccountType %}
-          <option value="{{i.name}}" {% if i.name == account_type %}selected{% endif %}>{{i.name}}</option>
-          {% endfor %}
+          <option value="Creator" {% if account_type == True %}selected{% endif %}>Creator</option>
+          <option value="Business Advertisor" {% if account_type == False %}selected{% endif %}>Business Advertisor</option>
         </select>
         <label for="account_type">Account Type </label>
       </div>

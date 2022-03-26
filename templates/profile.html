@@ -10,24 +10,39 @@
     {% endif %}
   </div>
   <div class="card-body center">
-      <h2 class="card-title">{{Account.user.first_name}} {{Account.user.last_name}}</h2>
-      <h5 class="card-text">@{{Account.user.username}} | {% if Account.verified %}✅{% endif %}</h5>
+      <h2 class="card-title">{{Account.user.first_name}} {{Account.user.last_name}} | @{{Account.user.username}} {% if Account.verified %}| ✅{% endif %}</h2>
+      <h5 class="card-text">
+        {% if request.user != Account.user %}
+        <a href="{% url 'messagedetail' Account.user.username %}" class="card-link">
+          <button type="button" class="btn btn-outline-success">Send Message</button>
+        </a>
+        {% endif %}
+      </h5>
+      <br>
       <i class="card-text">{{Account.status}}</i>
   </div>
     <ul class="list-group list-group-flush center">
-      <li class="list-group-item">Account Type: <b>{{Account.account_type.name}}</b></li>
+      <li class="list-group-item">Account Type: <b>{% if Account.creator%}Creator{% else %}Business Advertisor{% endif %}</b></li>
       <li class="list-group-item">Email: <b>{{Account.user.email}}</b></li>
       <li class="list-group-item">Contact: <b>{{Account.contact}}</b></li>
       <li class="list-group-item">Address: <b>{{Account.address}}</b></li>
       <li class="list-group-item">Youtube / Business Name: <b>{{Account.id_name}}</b></li>
       <li class="list-group-item">Youtube Link / Business Url: <b>{{Account.id_link}}</b></li>
     </ul>
-    <div class="card-body">
-      {% if Account.account_type.name == 'Creator' %}
-      <a href="#" class="card-link"><button type="button" class="btn btn-outline-success">Create Post</button></a>
+    <div class="card-body text-center">
+      {% if  request.user == Account.user %}
+      {% if Account.creator %}
+      {% if can_post %}
+      <button type="button" class="card-link btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Create Post ({{available_post}})
+      </button>
+      {% else %}
+      <p class="text-danger">You have reached your max-limit post of {{num_post}} as a {% if verified %}verified{% else %}unverified{% endif %} user</p>
       {% endif %}
-      <a href="#" class="card-link"><button type="button" class="btn btn-outline-primary">Edit</button></a>
+      {% endif %}
+      <a href={% url 'updateprofile' %} class="card-link"><button type="button" class="btn btn-outline-success">Edit</button></a>
       <a href={% url 'logout' %} class="card-link"><button type="button" class="btn btn-outline-danger">Logout</button></a>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -36,7 +51,7 @@
 <div class="col-xxl-3 col-xl-4 col-md-6 col-12 p-2">
     <div class="p-2 video-box">
         <div class="center">
-        <iframe width="390" height="220" src="https://www.youtube.com/embed/{{id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="390" height="220" src="https://www.youtube.com/embed/{{i.id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="grid-image-content-box">
             <div>
@@ -46,9 +61,38 @@
         </div>
           <div>
               <a href="{% url 'media' i.id %}" class="btn btn-primary">View Description</a>
+              {% if request.user == Account.user %}
+              <a href="{% url 'deletepost' i.id %}" class="btn btn-danger">Delete</a>
+              {% endif %}
           </div>
     </div>
 </div>
 {% endfor %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          {{form.as_p}}
+          <input type="submit" value="Submit">
+        </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+
 {% endblock root %}

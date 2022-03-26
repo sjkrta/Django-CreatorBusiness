@@ -21,9 +21,9 @@
                     <p class="text-center">
                         Don't have an account yet? Create one <a href={% url 'register' %}>here</a>
                     </p>
-                    <p class="text-center">
+                    {% comment %} <p class="text-center">
                         <a href={% url 'forgotpassword' %}>Forgot Password?</a>
-                    </p>
+                    </p> {% endcomment %}
                 </div>
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Log In</button>

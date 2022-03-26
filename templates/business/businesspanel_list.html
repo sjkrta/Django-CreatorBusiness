@@ -1,5 +1,45 @@
 {% extends 'base.html' %}
 {% block title %}Business List{% endblock title %}
 {% block root %}
-Business List
+    <div class="row">
+      <div class="order-xl-3 col-xxl-2 col-xl-3 col-12 border">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input name='name' type="text" class="form-control" placeholder="Search for brand" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <input class="btn btn-outline-secondary" type="submit" id="button-addon2" value="Search"></input>
+            </div>
+        </form>
+        <ul class="list-group-flush">
+        {% for i in Business %}
+            <li class="list-group-item"><a href="{% url 'profile' i.user.username %}">@{{i.user.username}} | {{i.user.first_name}} {{i.user.last_name}}</a></li>
+        {% endfor %}
+        </ul>
+      </div>
+      <div class="order-xl-2 col-xxl-10 col-xl-9 col border">
+        <div class="row">
+            {% for i in Account %}
+            <div class="col-xxl-3 col-xl-4 col-md-4 col-sm-6 col-12 p-2">
+                <div class="p-2 video-box">
+                    <div class="center">
+                        <a href="{% url 'profile' i.user.username %}"><img src="{% if i.image %}{{i.image.url}}{% endif %}" class="card-img-top business_card_profile_image" alt="{{i.user.username}}"></a>
+                    </div>
+                    <div class="grid-image-content-box">
+                        <div>
+                            <h5><b><a href="{% url 'profile' i.user.username %}">{{i.user.first_name}} {{i.user.last_name}}</b> {% if i.verified %}✅{% endif %}</a></h5>
+                            <p><b>{{i.title}}</b></p>
+                            <p>Brand ID: <b>{{i.id_link}}</b></p>
+                        </div>
+                    </div>
+                    <div class="flex-around">
+                        <div>
+                            <a href="{% url 'profile' i.user.username %}"><button type="button" class="btn btn-primary">View Profile</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
 {% endblock root %}

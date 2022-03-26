@@ -7,6 +7,9 @@
 </form>
 <ul class="list-group-flush">
 {% for i in Creators %}
-    <li class="list-group-item"><a href={% url 'profile' i.username %}>{{i.first_name}} {{i.last_name}}</a></li>
+    <li class="list-group-item"><a href="{% url 'profile' i.user.username %}">@{{i.user.username}} | {{i.user.first_name}} {{i.user.last_name}}</a></li>
 {% endfor %}
 </ul>
+<div class="text-center">
+<a href="{% url 'messagedetail' 'admin' %}" class="btn btn-outline-primary">Chat with our team</a>
+</div>

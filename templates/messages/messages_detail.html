@@ -1,5 +1,29 @@
 {% extends 'base.html' %}
 {% block title %}Message{% endblock title %}
 {% block root %}
-Message Detail
+{% for i in Messages %}
+    {% if i.sender == request.user %}
+    <div class="text-end">
+        <p>{{i.datetime}}</p>
+        <div class="message_box_container">
+        <div>{{i.content}}</div>
+    </div>
+</div>
+    {% else %}
+    <div class="text-start">
+        <p>{{i.datetime}}</p>
+    <div class="message_box_container">
+        <div>{{i.content}}</div>
+    </div>
+</div>
+    {% endif %}
+    {% endfor %}
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="message"></textarea>
+            <input class="btn btn-primary" type="submit" value="Send message" id="button-addon2">
+          </div>
+    </form>
 {% endblock root %}

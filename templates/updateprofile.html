@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Update Profile{% endblock title %}
+{% block root %}
+<form method='post' enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="first_name">First name</label>
+    <input name="first_name"type="text"/><br><br>
+    <label for="last_name">Last name</label>
+    <input name="last_name" type="text" /><br><br>
+    <label for="email">Email </label>
+    <input name="email" type="email" /><br><br>
+    {{form.as_p}}
+    <input type="submit" value="Done"/>
+</form>
+{% endblock root %}

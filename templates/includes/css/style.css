@@ -46,6 +46,13 @@
   object-fit: cover;
   padding: 10px;
 }
+.business_card_profile_image{
+  width: 100%;
+  height: 250px;
+  padding-right:2rem;
+  object-fit: cover;
+  padding: 10px;
+}
 .grid-image-content-box{
   display: grid;
   grid-template-columns: max-content auto;
@@ -53,4 +60,12 @@
 a{
   text-decoration: none;
   color: blue;
+}
+.message_box_container{
+  padding: 1rem;
+  border: 1px solid gray;
+  display: inline-block;
+  border-radius: 10px;
+  background-color: rgb(236, 236, 236);
+  font-size: 1.25rem;
 }

@@ -29,7 +29,10 @@
         </ul>
         
         <span class="navbar-text">
-            <a href={% url 'profile' request.user %}><button type="button" class="btn btn-outline-dark">{{request.user|capfirst}}</button></a>
+          <a href="{% url 'messagelist' request.user %}" class="card-link">
+            <button type="button" class="btn btn-outline-success">Inbox</button>
+          </a>
+            <a href={% url 'profile' request.user %}><button type="button" class="btn btn-dark">{{request.user|capfirst}}</button></a>
           </span>
       </div>
       {% endif %}
