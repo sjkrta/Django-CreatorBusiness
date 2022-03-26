@@ -25,4 +25,7 @@ urlpatterns = [
     # filter
     path('category/<str:category>/', views.categoryfilter_listview, name='category'),
     path('tag/<str:tag>/', views.tagfilter_listview, name='tag'),
+    # createworkhistory
+    path('createworkhistory/', views.createworkhistory, name='createworkhistory'),
+    path('deleteworkhistory/<int:id>/', views.deleteworkhistory, name='deleteworkhistory'),
 ]

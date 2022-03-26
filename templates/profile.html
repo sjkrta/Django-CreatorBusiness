@@ -31,17 +31,13 @@
     </ul>
     <div class="card-body text-center">
       {% if  request.user == Account.user %}
-      {% if Account.creator %}
-      {% if can_post %}
-      <button type="button" class="card-link btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Create Post ({{available_post}})
-      </button>
-      {% else %}
-      <p class="text-danger">You have reached your max-limit post of {{num_post}} as a {% if verified %}verified{% else %}unverified{% endif %} user</p>
-      {% endif %}
-      {% endif %}
-      <a href={% url 'updateprofile' %} class="card-link"><button type="button" class="btn btn-outline-success">Edit</button></a>
-      <a href={% url 'logout' %} class="card-link"><button type="button" class="btn btn-outline-danger">Logout</button></a>
+        {% if Account.creator %}
+            {% include 'includes/canpost.html' %}
+          {% else %}
+            <a href={% url 'createworkhistory' %} class="card-link"><button type="button" class="btn btn-outline-success">Create Work History</button></a>
+          {% endif %}
+          <a href={% url 'updateprofile' %} class="card-link"><button type="button" class="btn btn-outline-success">Edit</button></a>
+          <a href={% url 'logout' %} class="card-link"><button type="button" class="btn btn-outline-danger">Logout</button></a>
       {% endif %}
     </div>
   </div>
@@ -68,7 +64,17 @@
     </div>
 </div>
 {% endfor %}
-
+{% if Account.creator %}
+{% else %}
+<ul class="list-group list-group-flush m-4">
+  <li class="list-group-item list-group-item-success"><h3>Work History of {{request.user.first_name}} {{request.user.last_name}}</h3></li>
+  {% for i in WorkHistory %}
+  <li class="list-group-item"><h5>{{i}}{% if request.user == Account.user %}
+    <a href="{% url 'deleteworkhistory' i.id %}" class="btn btn-danger">Delete</a>
+    {% endif %}</h5></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,6 +99,4 @@
     </div>
   </div>
 </div>
-
-
 {% endblock root %}

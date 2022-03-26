@@ -1,0 +1,7 @@
+{% if can_post %}
+<button type="button" class="card-link btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Create Post ({{available_post}})
+</button>
+{% else %}
+<p class="text-danger">You have reached your max-limit post of {{num_post}} as a {% if verified %}verified{% else %}unverified{% endif %} user</p>
+{% endif %}

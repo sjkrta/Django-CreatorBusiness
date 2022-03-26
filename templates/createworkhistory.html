@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Create Work History{% endblock title %}
+{% block root %}
+<form method='post'>
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" value="Create"/>
+</form>
+{% endblock root %}

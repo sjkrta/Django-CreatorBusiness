@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # CURRENT APPS
-from .models import Account, AccountForm, Category,Post, PostForm,Tag,Message
+from .models import Account, AccountForm, Category,Post, PostForm,Tag,Message, WorkHistory, WorkHistoryForm
 from .passwordvalidator import password_check
 
 # -------------------------------------------ACCOUNT----------------------------------------------------------------
@@ -316,6 +316,7 @@ def profile_view(request, name):
         "can_post":can_post,
         "verified":verified,
         "available_post":available_post,
+        "WorkHistory":WorkHistory.objects.filter(account=Account.objects.get(user=request.user)),
         "Categories":Category.objects.all(),
         "Post":Post.objects.all().filter(creator=Account.objects.get(user=User.objects.get(username=name))),
     }
@@ -411,3 +412,23 @@ def media_detailview(request, id):
 def deletepost(request, id):
     Post.objects.get(id=id).delete()
     return redirect('profile', name=request.user)
+
+
+def deleteworkhistory(request, id):
+    WorkHistory.objects.get(id=id).delete()
+    return redirect('profile', name=request.user)
+
+def createworkhistory(request):
+    if request.method == 'POST':
+        form = WorkHistoryForm(request.POST)
+        if form.is_valid():
+            workhistory = form.save(commit=False)
+            workhistory.account = Account.objects.get(user=request.user)
+            workhistory = workhistory.save()
+            return redirect('profile', name=request.user)
+    else:
+        form = WorkHistoryForm()
+    context={
+        "form":form,
+    }
+    return render(request, 'createworkhistory.html', context)

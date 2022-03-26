@@ -1,10 +1,11 @@
 from django.contrib import admin
-from .models import Tag, Account, Category, Post, Message
+from .models import Tag, Account, Category, Post, Message, WorkHistory
 # Register your models here.
 
 admin.site.register(Tag)
 admin.site.register(Category)
 admin.site.register(Account)
+admin.site.register(WorkHistory)
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
