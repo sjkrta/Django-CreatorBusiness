@@ -229,24 +229,20 @@ def categoryfilter_listview(request, category):
 @login_required
 def tagfilter_listview(request, tag):
     Creators=[]
-    Posts=[]
     if request.method =='POST':
         name = request.POST['name'].split()
         for i in name:
             firstname=User.objects.all().filter(first_name__contains=i)
-            # for i in firstname:
-            #     if not i in Creators:
-            #         Creators.append(Account.objects.get(user=i, account))
+            for i in firstname:
+                if not i in Creators:
+                    Creators.append(i)
             lastname=User.objects.all().filter(last_name__contains=i)
             for i in lastname:
                 if not i in Creators:
                     Creators.append(i)
-    try:
-        Posts = Post.objects.all().filter(tags=Tag.objects.get(title=tag))
-    except:
-        Posts =[]
+    posts = Post.objects.filter(tags__title=tag)
     context={
-        "Post":Posts,
+        "Post":posts,
         "Tag":Tag.objects.all(),
         "Creators":Creators,
         "Categories":Category.objects.all(),
@@ -435,15 +431,18 @@ def media_detailview(request, id):
 
 # -------------------------------------------Create Post----------------------------------------------------------------
 
+@login_required
 def deletepost(request, id):
     Post.objects.get(id=id).delete()
     return redirect('profile', name=request.user)
 
 
+@login_required
 def deleteworkhistory(request, id):
     WorkHistory.objects.get(id=id).delete()
     return redirect('profile', name=request.user)
 
+@login_required
 def createworkhistory(request):
     if request.method == 'POST':
         form = WorkHistoryForm(request.POST)
