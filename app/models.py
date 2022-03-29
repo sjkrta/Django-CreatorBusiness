@@ -9,7 +9,7 @@ from django import forms
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     creator = models.BooleanField(default=False)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True, default="default.jpg", upload_to="accounts")
     contact = models.CharField(max_length=12, null=True, blank=True)
     address = models.CharField(max_length=100, null=True, blank=True)
     id_name = models.CharField(max_length=50, null=True, blank=True)
@@ -59,6 +59,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250, null=True, blank=True)
     content = models.TextField(max_length=1000, null=True, blank=True)
     id_link = models.CharField(max_length=50, null=True, blank=True)
+    id_video = models.CharField(max_length=50, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
@@ -67,7 +68,7 @@ class Post(models.Model):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['category','title','content','id_link','tags']
+        fields = ['category','title','content','id_video','tags']
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')

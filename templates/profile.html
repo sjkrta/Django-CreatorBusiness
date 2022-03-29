@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{{request.user}}{% endblock title %}
 {% block root %}
-<div class="card center boxshadow">
+<div class="card center boxshadow m-2">
   <div class="center">
     {% if Account.image %}
     <img src="{{Account.image.url}}" class="card-img-top profile_image" alt="{{Account.user.username}}">
@@ -42,28 +42,31 @@
     </div>
   </div>
 </div>
-<div class="row">
+
+<br>
+<div class="container">
+<div class="row justify-content-center">
 {% for i in Post %}
-<div class="col-xxl-3 col-xl-4 col-md-6 col-12 p-2">
-    <div class="p-2 video-box">
-        <div class="center">
-        <iframe width="390" height="220" src="https://www.youtube.com/embed/{{i.id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="grid-image-content-box">
-            <div>
-                <p><b>{{i.title}}</b></p>
-                <p>Video ID: <b>{{i.id_link}}</b></p>
-            </div>
-        </div>
-          <div>
-              <a href="{% url 'media' i.id %}" class="btn btn-primary">View Description</a>
-              {% if request.user == Account.user %}
-              <a href="{% url 'deletepost' i.id %}" class="btn btn-danger">Delete</a>
-              {% endif %}
-          </div>
+<div class="col video_block m-2 p-3 text-center">
+      <div>
+        <iframe width="390" height="220" src="{{i.id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div>
+        <p><b>{{i.title}}</b></p>
+        <p>Video ID: <b>{{i.id_video}}</b></p>
+      </div>
+      <div class="grid-column-space-between">
+        <a href="{% url 'media' i.id %}" class="btn btn-primary">View Description</a>
+        {% if request.user == Account.user %}
+        <a href="{% url 'deletepost' i.id %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+      </div>
     </div>
-</div>
-{% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+
 {% if Account.creator %}
 {% else %}
 <ul class="list-group list-group-flush m-4">

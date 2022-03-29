@@ -1,27 +1,30 @@
 {% for i in Post %}
-<div class="col-xxl-4 col-xl-4 col-md-6 col-sm-6 p-2">
-    <div class="p-2 video-box">
-        <div class="center">
-        <iframe width="280" height="180" src="https://www.youtube.com/embed/{{i.id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="grid-image-content-box">
-            <div>
-                <a href="{% url 'profile' i.creator.user.username %}"><img src="{% if i.creator.image %}{{i.creator.image.url}}{% else %}''{% endif %}" class="card-img-top card_profile_image" alt="{{i.user.username}}"></a>
-            </div>
-            <div>
-                <h5><b><a href="{% url 'profile' i.creator.user.username %}">{{i.creator.user.first_name}} {{i.creator.user.last_name}}</b> {% if i.creator.verified %}✅{% endif %}</a></h5>
-                <p><b>{{i.title}}</b></p>
-                <p>Video ID: <b>{{i.id_link}}</b></p>
-            </div>
-        </div>
-        <div class="flex-around">
-            <div>
-                <a href="{% url 'profile' i.creator.user.username %}"><button type="button" class="btn btn-primary">View Profile</button></a>
-            </div>
-            <div>
-                <a href="{% url 'media' i.id %}"><button type="button" class="btn btn-primary">Description</button></a>
-            </div>
-        </div>
+    <div class="col video_block m-2 p-3 text-center">
+        <h4>{{i.title}}</h4><hr>
+      <div>
+        <iframe width="390" height="220" src="{{i.id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div>
+        <ul class="list-group list-group-flush">
+            <li  class="list-group-item">
+                <p><b><a href="{{i.id_video}}">{{i.id_video}}</a></b></p>
+            </li>
+            <li class="list-group-item">
+                <div class="grid-column-left-side">
+                    <div>
+                        <a href="{% url 'profile' i.creator.user.username %}"><img src="{% if i.creator.image %}{{i.creator.image.url}}{% else %}''{% endif %}" class="card-img-top card_profile_image" alt="{{i.user.username}}"></a>
+                    </div>
+                    <div>
+                        <h5><b><a href="{% url 'profile' i.creator.user.username %}">{{i.creator.user.first_name}} {{i.creator.user.last_name}}</b> {% if i.creator.verified %}✅{% endif %}</a><br><p>@{{i.creator.user.username}}</p></h5>
+                    </div>
+                    <button type="button" class="btn btn-primary">Description</button>
+                </div>
+            </li>
+          </ul>
+      </div>
+      <div>
     </div>
-</div>
+      <div>
+      </div>
+    </div>
 {% endfor %}

@@ -306,7 +306,9 @@ def profile_view(request, name):
         if form.is_valid():
             profile = form.save(commit=False)
             profile.creator = Account.objects.get(user=request.user)
+            profile.id_link = profile.id_video.replace("watch?v=","embed/")
             profile = profile.save()
+            return redirect('profile', request.user)
     else:
         form = PostForm()
     context={
@@ -377,16 +379,40 @@ def message_listview(request, name):
 @login_required
 def daycounter_view(request):
     result=''
+    error=''
+    init_date='YYYY-MM-DD'
+    final_date='YYYY-MM-DD'
+    success=False
     if request.method == 'POST':
         initdate = request.POST['initdate']
         finaldate = request.POST['finaldate']
-        finaldate=datetime.date(int(finaldate[0:4]),int(finaldate[5:7]),int(finaldate[8:10]))
-        initdate=datetime.date(int(initdate[0:4]),int(initdate[5:7]),int(initdate[8:10]))
-        result=(finaldate-initdate).days
-        
+        try:
+            finaldate=datetime.date(int(finaldate[0:4]),int(finaldate[5:7]),int(finaldate[8:10]))
+            initdate=datetime.date(int(initdate[0:4]),int(initdate[5:7]),int(initdate[8:10]))
+            final_date=finaldate
+            init_date=initdate
+            result=(finaldate-initdate).days
+            if result<0:
+                error="Initial date is ahead of final date."
+                result=''
+                init_date='YYYY-MM-DD'
+                final_date='YYYY-MM-DD'
+            elif result==0:
+                error="Both dates are same."
+                result=''
+                init_date='YYYY-MM-DD'
+                final_date='YYYY-MM-DD'
+            else:
+                error=''
+        except:
+            error='Enter both dates before submitting.'
     context={
         "Categories":Category.objects.all(),
         "Result":result,
+        "final_date":final_date,
+        "init_date":init_date,
+        "error":error,
+        "success":success
         }
     return render(request, 'others/daycounter.html', context)
 

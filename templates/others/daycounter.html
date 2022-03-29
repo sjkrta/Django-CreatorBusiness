@@ -12,16 +12,23 @@
         </div>
         <div class="form-floating mb-3">
             <input class="form-control" id="floatingInput" name="finaldate" type="date"/>
-            <label for="finaldate">Initial Date</label>
+            <label for="finaldate">Final Date</label>
         </div>
+        <div class="text-center">
+            <span class="text-danger">{{error}}</span>
+        </div>
+        <br>
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Calculate</button>
         </div>
         <br>
-        <div class="form-floating mb-3">
-            <input class="form-control" id="floatingInput" name="result" value='{{Result}}' type="text"/>
-            <label for="result">Total Days</label>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" value="Final Date: {{final_date}}  ||  Initial Date: {{init_date}}" disabled>
         </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Total Days</span>
+            <input type="text" class="form-control"  name="result" value='{{Result}}' disabled>
+          </div>
     </div>
 </form>
 </div>
