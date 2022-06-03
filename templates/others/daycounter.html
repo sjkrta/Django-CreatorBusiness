@@ -2,8 +2,8 @@
 {% block title %}Day Counter{% endblock title %}
 {% block root %}
 <div class="centerform">
-    <div class="boxshadow" style="width: 32rem;">
-<form method="post">
+    <div class="boxshadow" style="width: 32rem; padding:0;">
+<form method="post"   style="background-color:#333; border-radius:10px; padding:1.5rem">
     {% csrf_token %}
     <div class="card-body">
         <div class="form-floating mb-3">

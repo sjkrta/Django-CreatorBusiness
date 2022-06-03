@@ -1,23 +1,25 @@
 {% for i in Post %}
     <div class="col video_block m-2 p-3 text-center">
-        <h4>{{i.title}}</h4><hr>
+        <h4 style="color:orange">{{i.title}}</h4><hr>
       <div>
         <iframe width="390" height="220" src="{{i.id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div>
         <ul class="list-group list-group-flush">
-            <li  class="list-group-item">
-                <p><b><a href="{{i.id_video}}">{{i.id_video}}</a></b></p>
+            <li  class="list-group-item"  style="background-color:#333; color:white;">
+                <p><b><a href="{{i.id_video}}" style="color:white;">{{i.id_video}}</a></b></p>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item"  style="background-color:#333;">
                 <div class="grid-column-left-side">
                     <div>
                         <a href="{% url 'profile' i.creator.user.username %}"><img src="{% if i.creator.image %}{{i.creator.image.url}}{% else %}''{% endif %}" class="card-img-top card_profile_image" alt="{{i.user.username}}"></a>
                     </div>
                     <div>
-                        <h5><b><a href="{% url 'profile' i.creator.user.username %}">{{i.creator.user.first_name}} {{i.creator.user.last_name}}</b> {% if i.creator.verified %}✅{% endif %}</a><br><p>@{{i.creator.user.username}}</p></h5>
+                        <h5  style="color:white;"><b><a href="{% url 'profile' i.creator.user.username %}">{{i.creator.user.first_name}} {{i.creator.user.last_name}}</b> {% if i.creator.verified %}✅{% endif %}</a><br><p>@{{i.creator.user.username}}</p></h5>
                     </div>
+                    <a href="{% url 'media' i.id %}" >
                     <button type="button" class="btn btn-primary">Description</button>
+                    </a>
                 </div>
             </li>
           </ul>

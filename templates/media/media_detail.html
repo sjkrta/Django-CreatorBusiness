@@ -3,13 +3,13 @@
 {% block root %}
     <div class="p-2 video-box">
         <div class="center">
-        <iframe width="780" height="440" src="https://www.youtube.com/embed/{{Post.id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="780" height="440" src="{{Post.id_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="center">
-            <h1><b>{{Post.title}}</b></h1>
-            <h2><a href="{% url 'profile' Post.creator.user.username %}">{{Post.creator.user.first_name}} {{Post.creator.user.last_name}}</a> {% if Post.creator.verified %}✅{% endif %}</h2>
-            <p>Video ID: <b>{{Post.id_link}}</b></p>
-            <i>{{Post.content}}</i>
+            <h1 style="color:white;"><b>{{Post.title}}</b></h1>
+            <h2 style="color:white;"><a href="{% url 'profile' Post.creator.user.username %}">{{Post.creator.user.first_name}} {{Post.creator.user.last_name}}</a> {% if Post.creator.verified %}✅{% endif %}</h2>
+            <p style="color:white;">Video ID: <b>{{Post.id_link}}</b></p>
+            <i style="color:white;">{{Post.content}}</i>
         </div>
     </div>
 {% endblock root %}
